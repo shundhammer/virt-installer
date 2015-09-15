@@ -1,4 +1,9 @@
 #!/usr/bin/ruby
+#
+# License: GPL 2 (see file COPYING for details)
+#
+# (c) 2015 SUSE LLC
+#
 
 require "pp"
 
