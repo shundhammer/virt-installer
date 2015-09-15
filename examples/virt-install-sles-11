@@ -1,0 +1,25 @@
+#!/usr/bin/ruby
+
+require_relative "./virt-installer"
+
+vm = VirtInstaller.new
+# Personal work environment
+vm.storage_dir   = "/space/libvirt/images"
+vm.iso_dir       = "/space/iso"
+
+# VM-specific settings
+vm.name          = "SLES-11-Test-VM"
+vm.disk.name     = "sles-11-test-disk.qcow2"
+vm.disk.size     = "40G"
+vm.find_iso("SLES-11-*")
+
+# Detail flags - not strictly neccessary, might as well use defaults
+vm.use_ssh       = true
+vm.use_multipath = false
+vm.use_uefi      = false
+
+# Uncomment to test invocation
+# vm.dry_run = true
+
+vm.start
+
