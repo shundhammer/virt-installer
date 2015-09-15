@@ -1,5 +1,5 @@
-				virt-installer
-				==============
+virt-installer
+==============
 
 Ruby class to simplify virtual installations with QEMU/libvirt/virt-installer.
 
