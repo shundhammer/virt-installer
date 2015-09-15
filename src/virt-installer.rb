@@ -118,7 +118,7 @@ class VirtInstaller
     args << "loader=#{OVMF_DIR}/ovmf-x86_64-opensuse-code.bin"
     args << "loader_ro=yes"
     args << "loader_type=pflash"
-    args << "nvram_template=#{OVMF_DIR}ovmf-x86_64-opensuse-vars.bin"
+    args << "nvram_template=#{OVMF_DIR}/ovmf-x86_64-opensuse-vars.bin"
 
     "--boot " + args.join(",")
   end
