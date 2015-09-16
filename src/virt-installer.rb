@@ -116,10 +116,10 @@ class VirtInstaller
     raise "Package qemu-ovmf-x86_64 not installed!" unless ovmf_installed?
 
     args = []
-    args << "loader=#{OVMF_DIR}/ovmf-x86_64-suse-code.bin"
+    args << "loader=#{OVMF_DIR}/ovmf-x86_64-code.bin"
     args << "loader_ro=yes"
     args << "loader_type=pflash"
-    args << "nvram_template=#{OVMF_DIR}/ovmf-x86_64-suse-vars.bin"
+    args << "nvram_template=#{OVMF_DIR}/ovmf-x86_64-vars.bin"
 
     "--boot " + args.join(",")
   end
@@ -163,7 +163,7 @@ if $PROGRAM_NAME == __FILE__  # Called direcly as standalone command?
 
   # Common for most use cases
   vm = VirtInstaller.new
-  vm.name = "SLES-12-Test-VM"
+  vm.name      = "SLES-12-Test-VM"
   vm.disk.name = "sles-test-disk.qcow2"
   vm.disk.size = "40G"
   vm.find_iso("SLE-12-SP1*")

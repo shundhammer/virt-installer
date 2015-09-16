@@ -9,7 +9,7 @@ vm.iso_dir       = "/space/iso"
 
 # VM-specific settings
 vm.name          = "SLES-12-Multipath-Test-VM"
-vm.disk.name     = "sles-test-multipath-disk.qcow2"
+vm.disk.name     = "sles-multipath-test-disk.qcow2"
 vm.disk.size     = "40G"
 vm.find_iso("SLE-12-SP1*") # Use the last matching one
 
