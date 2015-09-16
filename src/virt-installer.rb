@@ -42,7 +42,7 @@ class VirtInstaller
   end
 
   attr_accessor :storage_dir, :iso_dir, :disk
-  attr_accessor :name, :mem, :iso, :use_ssh
+  attr_accessor :name, :mem, :iso, :use_ssh, :ssh_password
   attr_accessor :use_uefi, :use_multipath
   attr_accessor :debug, :dry_run
 
@@ -52,6 +52,7 @@ class VirtInstaller
     @name          = "Test-VM"
     @mem           = 2048 # MB
     @use_ssh       = true
+    @ssh_password  = nil
     @use_uefi      = false
     @use_multipath = false
 
@@ -124,7 +125,10 @@ class VirtInstaller
   end
 
   def ssh_args
-    @use_ssh ? "--extra-args \"ssh=1\"" : ""
+    return "" unless @use_ssh
+    args = "--extra-args \"ssh=1"
+    args += " sshpassword=#{ssh_password}" if @ssh_password
+    args += "\""
   end
 
   def start

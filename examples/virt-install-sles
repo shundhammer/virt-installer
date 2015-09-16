@@ -15,6 +15,7 @@ vm.find_iso("SLE-12-SP1*") # Use the last matching one
 
 # Detail flags - not strictly neccessary, might as well use defaults
 vm.use_ssh       = true
+# vm.ssh_password  = "root"  # linuxrc will ask if not set (nil)
 vm.use_multipath = false
 vm.use_uefi      = false
 
