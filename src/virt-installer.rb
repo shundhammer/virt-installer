@@ -13,9 +13,10 @@ class VirtInstaller
 
   # Class that represents a virtual disk
   class VirtualDisk
-    attr_accessor :name, :size
+    attr_accessor :dir, :name, :size
 
     def initialize
+      @dir  = "/space/libvirt/images"
       @name = "test.qcow2"
       @size = "40G"
       @created = false
@@ -41,18 +42,20 @@ class VirtInstaller
     end
   end
 
-  attr_accessor :storage_dir, :iso_dir, :disk
-  attr_accessor :name, :mem, :iso, :use_ssh, :ssh_password
+  attr_accessor :iso_dir, :disk, :name, :mem, :iso
+  attr_accessor :use_ssh, :ssh_password
+  attr_accessor :use_vnc, :vnc_password
   attr_accessor :use_uefi, :use_multipath
   attr_accessor :debug, :dry_run
 
   def initialize
-    @storage_dir   = "/space/libvirt/images"
     @iso_dir       = "/space/iso"
     @name          = "Test-VM"
     @mem           = 2048 # MB
     @use_ssh       = true
     @ssh_password  = nil
+    @use_vnc       = false
+    @vnc_password  = nil
     @use_uefi      = false
     @use_multipath = false
 
@@ -131,6 +134,12 @@ class VirtInstaller
     args += "\""
   end
 
+  def vnc_args
+    return "" unless @use_vnc
+    raise "vnc_password not set" unless @vnc_password
+    "--graphics vnc,password=#{@vnc_password}"
+  end
+
   def start
     raise "Insufficient permissions - run this with 'sudo'!" unless root_permissions?
 
@@ -141,6 +150,11 @@ class VirtInstaller
     find_iso("*") if @iso.empty?
     print "Using ISO #{@iso}\n"
 
+    if @use_ssh && @use_vnc
+      @use_ssh = false
+      print "Can't use both ssh and VNC together - disabling ssh\n"
+    end
+
     cmd = "virt-install"
     args = []
     args << "--connect=qemu:///system"
@@ -150,6 +164,7 @@ class VirtInstaller
     args << "--memory=#{@mem}"
     args << uefi_args if @use_uefi
     args << ssh_args  if @use_ssh
+    args << vnc_args  if @use_vnc
 
     cmd += " " + args.join(" ")
 

@@ -4,7 +4,7 @@ require_relative "./virt-installer"
 
 vm = VirtInstaller.new
 # Personal work environment
-vm.storage_dir   = "/space/libvirt/images"
+vm.disk.dir      = "/space/libvirt/images"
 vm.iso_dir       = "/space/iso"
 
 # VM-specific settings
@@ -18,6 +18,8 @@ vm.use_ssh       = true
 vm.ssh_password  = "root"  # linuxrc will ask if not set (nil)
 vm.use_multipath = true
 vm.use_uefi      = false
+# vm.use_vnc       = true
+# vm.vnc_password  = "vnc"   # must specify password if use_vnc
 
 # Uncomment to test invocation
 # vm.dry_run = true
