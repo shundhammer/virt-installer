@@ -62,28 +62,31 @@ EXAMPLE
 =======
 
     #!/usr/bin/ruby
-    
+
     require_relative "./virt-installer"
-    
+
     vm = VirtInstaller.new
     # Personal work environment
-    vm.storage_dir   = "/space/libvirt/images"
+    vm.disk.dir      = "/space/libvirt/images"
     vm.iso_dir       = "/space/iso"
-    
+
     # VM-specific settings
     vm.name          = "SLES-12-Test-VM"
     vm.disk.name     = "sles-test-disk.qcow2"
     vm.disk.size     = "40G"
     vm.find_iso("SLE-12-SP1*") # Use the last matching one
-    
+
     # Detail flags - not strictly neccessary, might as well use defaults
     vm.use_ssh       = true
+    vm.ssh_password  = "root"  # linuxrc will ask if not set (nil)
     vm.use_multipath = false
     vm.use_uefi      = false
-    
+    # vm.use_vnc       = true
+    # vm.vnc_password  = "vnc"   # must specify password if use_vnc
+
     # Uncomment to test invocation
     # vm.dry_run = true
-    
+
     vm.start
 
 
