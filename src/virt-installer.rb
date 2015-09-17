@@ -181,7 +181,7 @@ if $PROGRAM_NAME == __FILE__  # Called direcly as standalone command?
   vm.name      = "SLES-12-Test-VM"
   vm.disk.name = "sles-test-disk.qcow2"
   vm.disk.size = "40G"
-  vm.find_iso("SLE-12-SP1*")
+  vm.find_iso("SLE-12*")
 
   # Debug options - only if desired
   # vm.debug = true
