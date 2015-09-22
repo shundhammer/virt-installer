@@ -13,20 +13,24 @@ class VirtInstaller
 
   # Class that represents a virtual disk
   class VirtualDisk
-    attr_accessor :dir, :name, :size
+    attr_accessor :dir, :name, :size, :force_root_dir
 
     def initialize
       @dir  = "/space/libvirt/images"
       @name = "test.qcow2"
       @size = "40G"
       @created = false
+      @force_root_dir = false
     end
 
     def path
-      "#{@storage_dir}/#{@name}"
+      "#{@dir}/#{@name}"
     end
 
     def create
+      if File.dirname(path) == "/" && !@force_root_dir
+        raise "Refusing to create disk image in root directory: #{path}"
+      end
       cmd = "qemu-img create -f qcow2 #{path} #{size}"
       print "Creating virtual disk:\n#{cmd}\n" if @debug
       system cmd
