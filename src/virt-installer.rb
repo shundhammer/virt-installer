@@ -13,13 +13,14 @@ class VirtInstaller
 
   # Class that represents a virtual disk
   class VirtualDisk
-    attr_accessor :dir, :name, :size, :force_root_dir
+    attr_accessor :dir, :name, :size, :force_root_dir, :must_exist
 
     def initialize
       @dir  = "/space/libvirt/images"
       @name = "test.qcow2"
       @size = "40G"
-      @created = false
+      @created    = false
+      @must_exist = false
       @force_root_dir = false
     end
 
@@ -28,6 +29,7 @@ class VirtInstaller
     end
 
     def create
+      raise "Virtual disk #{path} must exist" if @must_exist
       if File.dirname(path) == "/" && !@force_root_dir
         raise "Refusing to create disk image in root directory: #{path}"
       end
@@ -43,6 +45,10 @@ class VirtInstaller
 
     def exist?
       File.exist?(path)
+    end
+
+    def must_exist?
+      @must_exist
     end
   end
 
