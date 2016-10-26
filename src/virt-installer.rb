@@ -175,6 +175,7 @@ class VirtInstaller
     args << uefi_args if @use_uefi
     args << ssh_args  if @use_ssh
     args << vnc_args  if @use_vnc
+    args << "|& egrep -v '(WARNING|ERROR) \*\*'" # Get rid of brain-dead Gtk bullshit messages
 
     cmd += " " + args.join(" ")
 
