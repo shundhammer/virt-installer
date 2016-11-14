@@ -1,0 +1,28 @@
+#!/usr/bin/ruby
+
+require_relative "./virt-installer"
+
+vm = VirtInstaller.new
+# Personal work environment
+vm.disk.dir      = "/space/libvirt/images"
+vm.iso_dir       = "/space/iso"
+
+# VM-specific settings
+vm.name          = "CASP-Test-VM"
+vm.disk.name     = "casp-test-disk.qcow2"
+vm.disk.size     = "40G"
+vm.find_iso("*CASP*") # Use the last matching one
+
+# Detail flags - not strictly neccessary, might as well use defaults
+vm.use_ssh       = true
+vm.ssh_password  = "root"  # linuxrc will ask if not set (nil)
+vm.use_multipath = false
+vm.use_uefi      = false
+vm.boot_insecure = true
+# vm.use_vnc       = true
+# vm.vnc_password  = "vnc"   # must specify password if use_vnc
+
+# Uncomment to test invocation
+# vm.dry_run = true
+
+vm.start
