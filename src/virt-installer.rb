@@ -56,6 +56,7 @@ class VirtInstaller
   attr_accessor :use_ssh, :ssh_password
   attr_accessor :use_vnc, :vnc_password
   attr_accessor :use_uefi, :use_multipath
+  attr_accessor :boot_insecure
   attr_accessor :debug, :dry_run
 
   def initialize
@@ -68,6 +69,7 @@ class VirtInstaller
     @vnc_password  = nil
     @use_uefi      = false
     @use_multipath = false
+    @boot_insecure = false
 
     @iso           = nil
     @debug         = false
@@ -139,9 +141,16 @@ class VirtInstaller
 
   def ssh_args
     return "" unless @use_ssh
-    args = "--extra-args \"ssh=1"
+    args = "ssh=1"
     args += " sshpassword=#{ssh_password}" if @ssh_password
-    args += "\""
+    args
+  end
+
+  def kernel_args
+    args = ssh_args
+    args += " insecure=1" if @boot_insecure
+    args = "--extra-args \"#{args}\"" unless args.empty?
+    args
   end
 
   def vnc_args
@@ -173,7 +182,7 @@ class VirtInstaller
     args << disk_args
     args << "--memory=#{@mem}"
     args << uefi_args if @use_uefi
-    args << ssh_args  if @use_ssh
+    args << kernel_args
     args << vnc_args  if @use_vnc
     args << "|& egrep -v '(WARNING|ERROR) \*\*'" # Get rid of brain-dead Gtk bullshit messages
 
