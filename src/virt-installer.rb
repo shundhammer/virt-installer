@@ -140,17 +140,21 @@ class VirtInstaller
   end
 
   def ssh_args
-    return "" unless @use_ssh
+    return nil unless @use_ssh
     args = "ssh=1"
     args += " sshpassword=#{ssh_password}" if @ssh_password
     args
   end
 
   def kernel_args
-    args = ssh_args
-    args += " insecure=1" if @boot_insecure
-    args = "--extra-args \"#{args}\"" unless args.empty?
-    args
+    args = []
+    args << ssh_args
+    args << "insecure=1" if @boot_insecure
+    args.compact!
+    return "" if args.empty?
+
+    extra_args = args.join(" ")
+    "--extra-args \"#{extra_args}\""
   end
 
   def vnc_args
