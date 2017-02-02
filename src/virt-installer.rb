@@ -143,6 +143,7 @@ class VirtInstaller
     return nil unless @use_ssh
     args = "ssh=1"
     args += " sshpassword=#{ssh_password}" if @ssh_password
+    args += " startshell=1"
     args
   end
 
