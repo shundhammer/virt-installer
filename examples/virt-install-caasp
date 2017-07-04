@@ -8,8 +8,8 @@ vm.disk.dir      = "/space/libvirt/images"
 vm.iso_dir       = "/space/iso"
 
 # VM-specific settings
-vm.name          = "CAAS-Test-VM"
-vm.disk.name     = "caas-test-disk.qcow2"
+vm.name          = "CaaSP-Test-VM"
+vm.disk.name     = "caasp-test-disk.qcow2"
 vm.disk.size     = "39G"
 vm.find_iso("*CaaS*") # Use the last matching one
 
