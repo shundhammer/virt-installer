@@ -8,10 +8,10 @@ vm.disk.dir      = "/space/libvirt/images"
 vm.iso_dir       = "/space/iso"
 
 # VM-specific settings
-vm.name          = "CASP-Test-VM"
-vm.disk.name     = "casp-test-disk.qcow2"
-vm.disk.size     = "40G"
-vm.find_iso("*CASP*") # Use the last matching one
+vm.name          = "CAAS-Test-VM"
+vm.disk.name     = "caas-test-disk.qcow2"
+vm.disk.size     = "39G"
+vm.find_iso("*CaaS*") # Use the last matching one
 
 # Detail flags - not strictly neccessary, might as well use defaults
 vm.use_ssh       = true
