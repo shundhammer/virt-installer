@@ -8,10 +8,10 @@ vm.disk.dir      = "/space/libvirt/images"
 vm.iso_dir       = "/space/iso"
 
 # VM-specific settings
-vm.name          = "SLES-15-Test-VM"
-vm.disk.name     = "sles-test-disk.qcow2"
+vm.name          = "SLES-12-Test-VM"
+vm.disk.name     = "sles-12-test-disk.qcow2"
 vm.disk.size     = "40G"
-vm.find_iso("*SLE-15*") # Use the last matching one
+vm.find_iso("SLE-12*") # Use the last matching one
 
 # Detail flags - not strictly neccessary, might as well use defaults
 vm.use_ssh       = true
