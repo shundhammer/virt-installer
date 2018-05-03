@@ -57,6 +57,7 @@ class VirtInstaller
   attr_accessor :use_vnc, :vnc_password
   attr_accessor :use_uefi, :use_multipath
   attr_accessor :boot_insecure
+  attr_accessor :self_update
   attr_accessor :debug, :dry_run
 
   def initialize
@@ -70,6 +71,7 @@ class VirtInstaller
     @use_uefi      = false
     @use_multipath = false
     @boot_insecure = false
+    @self_update   = false
 
     @iso           = nil
     @debug         = false
@@ -151,6 +153,7 @@ class VirtInstaller
     args = []
     args << ssh_args
     args << "insecure=1" if @boot_insecure
+    args << "self_update=0" unless @self_update
     args.compact!
     return "" if args.empty?
 
