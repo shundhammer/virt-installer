@@ -3,6 +3,7 @@
 require_relative "./virt-installer"
 
 vm = VirtInstaller.new
+
 # Personal work environment
 vm.disk.dir      = "/space/libvirt/images"
 vm.iso_dir       = "/space/iso"
@@ -11,6 +12,11 @@ vm.iso_dir       = "/space/iso"
 vm.name          = "SLES-12-Test-VM"
 vm.disk.name     = "sles-12-test-disk.qcow2"
 vm.disk.size     = "40G"
+
+# vm.disk2         = VirtInstaller::VirtualDisk.new
+# vm.disk2.name    = "sles-12-test-disk2.qcow2"
+# vm.disk2.size    = "40G"
+
 vm.find_iso("SLE-12*") # Use the last matching one
 
 # Detail flags - not strictly neccessary, might as well use defaults
