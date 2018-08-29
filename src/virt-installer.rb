@@ -19,8 +19,8 @@ class VirtInstaller
       @dir  = "/space/libvirt/images"
       @name = "test.qcow2"
       @size = "40G"
-      @created    = false
-      @must_exist = false
+      @created        = false
+      @must_exist     = false
       @force_root_dir = false
     end
 
@@ -52,7 +52,7 @@ class VirtInstaller
     end
   end
 
-  attr_accessor :iso_dir, :disk, :name, :mem, :iso
+  attr_accessor :iso_dir, :disk, :disk2, :name, :mem, :iso
   attr_accessor :use_ssh, :ssh_password
   attr_accessor :use_vnc, :vnc_password
   attr_accessor :use_uefi, :use_multipath
@@ -78,6 +78,8 @@ class VirtInstaller
     @dry_run       = false
 
     @disk          = VirtualDisk.new
+    @disk2         = nil
+    @multipath_no  = "00"
     ENV["lang"]    = "C" # avoid translated output from external commands
   end
 
@@ -118,12 +120,13 @@ class VirtInstaller
     !Dir.glob(OVMF_DIR + "/ovmf-*.bin").empty?
   end
 
-  def disk_args
+  def disk_args(disk)
+    return "" if disk.nil?
     if @use_multipath
-      args = "--disk #{@disk.path},serial=multipath_test_01"
+      args = "--disk #{disk.path},serial=multipath_test_#{@multipath_no.succ!}"
       args += " " + args
     else
-      args = "--disk #{@disk.path}"
+      args = "--disk #{disk.path}"
     end
     args
   end
@@ -173,7 +176,8 @@ class VirtInstaller
     kill if running?
     delete if exist?
 
-    @disk.create unless @disk.exist?
+    @disk.create  unless @disk.exist?
+    @disk2.create unless @disk2.nil? || @disk2.exist?
     find_iso("*") if @iso.empty?
     print "Using ISO #{@iso}\n"
 
@@ -187,7 +191,8 @@ class VirtInstaller
     args << "--connect=qemu:///system"
     args << "--location=#{@iso}"
     args << "--name=#{@name}"
-    args << disk_args
+    args << disk_args(@disk)
+    args << disk_args(@disk2)
     args << "--memory=#{@mem}"
     args << uefi_args if @use_uefi
     args << kernel_args
