@@ -57,6 +57,16 @@ Call one of the examples with 'sudo':
 
     sudo virt-install-sles
 
+Then, in another terminal window, ssh to that machine and start the
+installation there:
+
+    ssh -X root@...
+    yast.ssh
+
+When the installation is done, you will have to quit that ssh session and
+typically also in the console of that machine the shell running there (which is
+a safeguard against an installer crash so y2logs can still easily be salvaged).
+
 
 EXAMPLE
 =======
