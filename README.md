@@ -44,7 +44,7 @@ it or delete it completely with
 (intentionally using the slightly broken Ruby way of ignoring correct English
 grammar to retain consistency with other Ruby classes).
 
-This is work in process and will likely see improvements over time.
+This is work in progress and will likely see improvements over time.
 
 There is no RPM, Spec-file, complex build system, nor are there unit tests so
 far; this is being tested as I use it to do my daily work.
