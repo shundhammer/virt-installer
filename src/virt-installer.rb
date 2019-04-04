@@ -55,32 +55,34 @@ class VirtInstaller
   attr_accessor :iso_dir, :disk, :disk2, :name, :mem, :iso
   attr_accessor :use_ssh, :ssh_password
   attr_accessor :use_vnc, :vnc_password
+  attr_accessor :use_serial_console
   attr_accessor :use_uefi, :use_multipath
   attr_accessor :boot_insecure
   attr_accessor :self_update
   attr_accessor :debug, :dry_run
 
   def initialize
-    @iso_dir       = "/space/iso"
-    @name          = "Test-VM"
-    @mem           = 2048 # MB
-    @use_ssh       = true
-    @ssh_password  = nil
-    @use_vnc       = false
-    @vnc_password  = nil
-    @use_uefi      = false
-    @use_multipath = false
-    @boot_insecure = false
-    @self_update   = false
-
-    @iso           = nil
-    @debug         = false
-    @dry_run       = false
-
-    @disk          = VirtualDisk.new
-    @disk2         = nil
-    @multipath_no  = "00"
-    ENV["lang"]    = "C" # avoid translated output from external commands
+    @iso_dir            = "/space/iso"
+    @name               = "Test-VM"
+    @mem                = 2048 # MB
+    @use_ssh            = true
+    @ssh_password       = nil
+    @use_vnc            = false
+    @vnc_password       = nil
+    @use_uefi           = false
+    @use_multipath      = false
+    @use_serial_console = false
+    @boot_insecure      = false
+    @self_update        = false
+                        
+    @iso                = nil
+    @debug              = false
+    @dry_run            = false
+                        
+    @disk               = VirtualDisk.new
+    @disk2              = nil
+    @multipath_no       = "00"
+    ENV["lang"]         = "C" # avoid translated output from external commands
   end
 
   def run_cmd(cmd)
@@ -152,11 +154,18 @@ class VirtInstaller
     args
   end
 
+  def serial_console_args
+    return nil unless @use_serial_console
+    
+    "console=ttyS0,57600"
+  end
+
   def kernel_args
     args = []
     args << ssh_args
     args << "insecure=1" if @boot_insecure
     args << "self_update=0" unless @self_update
+    args << serial_console_args
     args.compact!
     return "" if args.empty?
 
