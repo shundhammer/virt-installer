@@ -34,7 +34,7 @@ class VirtInstaller
         raise "Refusing to create disk image in root directory: #{path}"
       end
       cmd = "qemu-img create -f qcow2 #{path} #{size}"
-      print "Creating virtual disk:\n#{cmd}\n" if @debug
+      puts "Creating virtual disk:\n#{cmd}" if @debug
       system cmd
       @created = true
     end
@@ -86,7 +86,7 @@ class VirtInstaller
   end
 
   def run_cmd(cmd)
-    print "Executing:\n#{cmd}\n" if @debug
+    puts "Executing:\n#{cmd}" if @debug
     output = `#{cmd}`
     output.split("\n")
   end
@@ -109,7 +109,7 @@ class VirtInstaller
 
   def find_iso(pattern)
     files = Dir.glob(@iso_dir + "/" + pattern + ".iso").sort
-    # print "Matching ISOs: \n#{pp files}" if @debug
+    # puts "Matching ISOs: \n#{pp files}" if @debug
     raise "No ISO matching #{pattern} in #{@iso_dir}" if files.empty?
     @iso = files.last
   end
@@ -188,11 +188,11 @@ class VirtInstaller
     @disk.create  unless @disk.exist?
     @disk2.create unless @disk2.nil? || @disk2.exist?
     find_iso("*") if @iso.empty?
-    print "Using ISO #{@iso}\n"
+    puts "Using ISO #{@iso}"
 
     if @use_ssh && @use_vnc
       @use_ssh = false
-      print "Can't use both ssh and VNC together - disabling ssh\n"
+      puts "Can't use both ssh and VNC together - disabling ssh"
     end
 
     cmd = "virt-install"
@@ -210,9 +210,20 @@ class VirtInstaller
 
     cmd += " " + args.join(" ")
 
-    print "\n\n*** DRY RUN - not executing ***\n" if @dry_run
-    print "\n#{cmd}\n\n"
+    puts "\n\n*** DRY RUN - not executing ***" if @dry_run
+    puts "\n#{cmd}\n"
+    serial_console_hint if @use_serial_console
     system(cmd) unless @dry_run
+  end
+
+  def serial_console_hint
+    puts
+    puts
+    puts "Use the serial console with:"
+    puts
+    puts "    sudo virsh console #{@name}"
+    puts
+    puts
   end
 end
 
@@ -230,9 +241,9 @@ if $PROGRAM_NAME == __FILE__  # Called direcly as standalone command?
   vm.dry_run = true
 
   # Just testing some of the features
-  print "VM exists\n"  if vm.exist?
-  print "VM running\n" if vm.running?
-  # print "qemu_ovmf_x86_64 not installed!\n" unless vm.omvf_installed?
+  puts "VM exists"  if vm.exist?
+  puts "VM running" if vm.running?
+  # puts "qemu_ovmf_x86_64 not installed!" unless vm.omvf_installed?
 
   # Actually start the VM
   vm.start
