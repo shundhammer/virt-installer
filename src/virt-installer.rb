@@ -55,7 +55,7 @@ class VirtInstaller
   attr_accessor :iso_dir, :disk, :disk2, :name, :mem, :iso
   attr_accessor :use_ssh, :ssh_password
   attr_accessor :use_vnc, :vnc_password
-  attr_accessor :use_serial_console
+  attr_accessor :use_serial_console, :use_textmode
   attr_accessor :use_uefi, :use_multipath
   attr_accessor :boot_insecure
   attr_accessor :self_update
@@ -72,13 +72,14 @@ class VirtInstaller
     @use_uefi           = false
     @use_multipath      = false
     @use_serial_console = false
+    @use_textmode       = false
     @boot_insecure      = false
     @self_update        = false
-                        
+
     @iso                = nil
     @debug              = false
     @dry_run            = false
-                        
+
     @disk               = VirtualDisk.new
     @disk2              = nil
     @multipath_no       = "00"
@@ -154,9 +155,15 @@ class VirtInstaller
     args
   end
 
+  def textmode_args
+    return nil unless @use_textmode
+
+    "textmode=1"
+  end
+
   def serial_console_args
     return nil unless @use_serial_console
-    
+
     "console=ttyS0,57600"
   end
 
@@ -166,6 +173,7 @@ class VirtInstaller
     args << "insecure=1" if @boot_insecure
     args << "self_update=0" unless @self_update
     args << serial_console_args
+    args << textmode_args
     args.compact!
     return "" if args.empty?
 
